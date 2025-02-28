@@ -36,61 +36,34 @@ boxlength = 15 #nm
 
 # Define the contents of the system.
 
-names  = [#'aSyn PEG400','aSynM5DP5A PEG400',
-          #'A1 PEG400',
-          #"A1 PEG2000",
-          #"A1 PEG12000"
-          #'aSyn PEG8000',
-          "Gcn4Aro3P PEG8000",
-          #'aSynM5DP5A PEG8000',
-          #'A1 PEG8000',
-          #'aSyn PEG8000',
-          #'A1 PEG20000'
-          #"AroM PEG8000",
-          #"AroMM PEG8000"
+names  = ["A1 PEG400",
+          "A1 PEG8000",
+          "AroM PEG8000",
+          "AroMM PEG8000",
+          "aSyn PEG8000",
+          "aSyn2745 PEG8000"
 ]
 
 temperature  = {
-          'aSyn PEG400':298,
-          'aSynM5DP5A PEG400':298,
           'A1 PEG400':298,
-          "A1 PEG2000":298,
-          "A1 PEG12000":298,
-          'aSyn PEG8000':298,
-          "Gcn4Aro3P PEG8000":[283,287],
-          'aSynM5DP5A PEG8000':298,
           'A1 PEG8000':298,
-          'aSyn PEG8000':298,
-          'A1 PEG20000':298,
           "AroM PEG8000":298,
-          "AroMM PEG8000":298
+          "AroMM PEG8000":298,
+          'aSyn PEG8000':298,
+          'aSyn2745 PEG8000':298
 }
-
-
 
 # number of PEG chains = 6.022 * boxlength**3 * 0.02 / (8000 / 1000 * 10)
 # we assume that w/v = w/w and that density is 1 kg/l
 #["100 508", "100 381","100 318","100 254","100 191","100 127"]
 chains= {
-    "A1 PEG8000":["100 0"],#"100 127","100 191","100 254"],#"100 0","100 64","100 127","100 191","100 254"],#["100 292" ],#"100 191","100 508", "100 381","100 318","100 254"],#191","100 127"],  #"100 508", "100 381","100 318","100 254"], #[ "100 64"],
-    "A1 PEG2000":['100 254','100 508'],# '100 0', '100 254', '100 508'],
-    "A1 PEG12000":['100 42', '100 85'],
-    'aSyn PEG8000':["100 445"],#"100 508", "100 381","100 318","100 254"],#191","100 127"],  #"100 508", "100 381","100 318","100 254"], #["100 64"],
-    'aSynM5DP5A PEG8000':["100 381","100 508","100 318","100 254"],#"100 508", "100 381","100 318","100 254"]#191","100 127"]  #"100 508", "100 381","100 318","100 254"] #["100 64"]
-    "A1 PEG400":["100 0", "100 1287"], #"100 0","100 1287","100 2554","100 3841","100 5108"],#["100 0"],#"100 5108", "100 1287","100 2554","100 3841"],#,"100 5108"],#"100 6395","100 7662","100 10216"],
-    "aSyn PEG400":["100 0"],#"100 5108"],#,"100 1287","100 2554","100 3841"],#"100 5108"],#"100 6395","100 7662","100 10216"],  
-    "aSynM5DP5A PEG400":["100 0"],#"100 5108"]#,"100 1287","100 2554","100 3841"]#,"100 5108"]#,"100 6395","100 7662","100 10216"]
-    "A1 PEG20000":["100 0","100 26","100 51","100 76","100 101"],
-    "AroM PEG8000":["100 64"],#["100 0","100 64","100 127","100 191","100 254"], #"100 127"
-    "AroMM PEG8000":["100 64"],# ["100 0","100 64","100 127","100 191","100 254"]
-    "Gcn4Aro3P PEG8000":["200 0"],#"100 64","100 127"]
+    "A1 PEG400":["100 0","100 1287","100 2554","100 3841","100 5108"],
+    "A1 PEG8000":["100 0","100 64","100 127","100 191","100 254"],
+    "AroM PEG8000":["100 0","100 64","100 127","100 191","100 254"],
+    "AroMM PEG8000":["100 0","100 64","100 127","100 191","100 254"],
+    "aSyn PEG8000":["100 0","100 64","100 127","100 191","100 254","100 318","100 381","100 508"],
+    "aSyn2745 PEG8000":["100 0","100 64","100 127","100 191","100 254"]
 } 
-
-ionics = {'aSyn PEG8000':250,
-          'aSynM5DP5A PEG8000':250,
-          'A1 PEG8000':150
-}
-
 
 #
 for name,ionic in zip(names,[150]*len(names)):
@@ -98,7 +71,7 @@ for name,ionic in zip(names,[150]*len(names)):
     dir_name = name.replace(' ','-')
     if not os.path.isdir(dir_name):
         os.mkdir(dir_name)
-    for temp in [283,287]:#[temperature[name]]:
+    for temp in [298]:
         if not os.path.isdir(F'{dir_name}/{temp:d}'):
             os.mkdir(F'{dir_name}/{temp:d}')
         for N_chains in chains[name]:
@@ -106,8 +79,13 @@ for name,ionic in zip(names,[150]*len(names)):
             if not os.path.isdir(F"{dir_name}/{temp:d}/{dir_chains}"):
                 os.mkdir(F'{dir_name}/{temp:d}/{dir_chains}')
             with open(F'{dir_name:s}_{temp:d}_{dir_chains}.sh', 'w') as submit:
-                submit.write(submission.render(name=dir_name,dirchains=dir_chains,proteins=name,ionic=ionic,
-                             numbers='{}'.format(N_chains),temp='{:d}'.format(temp),
-                             cutoff='{:.1f}'.format(cutoff),boxlength='{:.1f}'.format(boxlength)))
+                submit.write(submission.render(name=dir_name,
+                                               dirchains=dir_chains,
+                                               proteins=name,
+                                               ionic=ionic,
+                                               numbers='{}'.format(N_chains),
+                                               temp='{:d}'.format(temp),
+                                               cutoff='{:.1f}'.format(cutoff),
+                                               boxlength='{:.1f}'.format(boxlength)))
             print(F'Submitting: {dir_name:s}_{temp:d}_{dir_chains}.sh')
             subprocess.run(['qsub','{:s}_{:d}_{:s}.sh'.format(dir_name,temp,dir_chains)])
