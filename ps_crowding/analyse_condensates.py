@@ -149,10 +149,7 @@ def determine_cutoffs(h, protein):
     h1 = hm[z>0]
     z2 = z[z<0]
     h2 = hm[z<0]
-    # p0=[hm.min(),hm.max(),3,1]
     p0=[1,1,1,1]
-    # res1 = least_squares(residuals, x0=p0, args=[z1, h1], bounds=([0]*4,[1e3]*4))
-    # res2 = least_squares(residuals, x0=p0, args=[z2, h2], bounds=([0]*4,[1e3]*4))
     res1 = least_squares(residuals, x0=p0, args=[z1, h1], bounds=([0]*4,[100]*4))
     res2 = least_squares(residuals, x0=p0, args=[z2, h2], bounds=([0]*4,[100]*4))
     
@@ -164,12 +161,8 @@ def determine_cutoffs(h, protein):
         cutoffs2 = [zDS+25,-zDS-25]
     else:
         cutoffs1 = [res1.x[2]-.5*res1.x[3],-res2.x[2]+.5*res2.x[3]]
-        #cutoffs1 = [res1.x[2]-res1.x[3],-res2.x[2]+res2.x[3]]
         cutoffs2 = [res1.x[2]+10*res1.x[3],-res2.x[2]-10*res2.x[3]]
-    
-    # cutoffs1 = [res1.x[2]-res1.x[3],-res2.x[2]+res2.x[3]]
-    # cutoffs2 = [res1.x[2]+6*res1.x[3],-res2.x[2]-6*res2.x[3]]
-    # cutoffs1 = [7,-7]
+
     
     if np.abs(cutoffs2[1]/cutoffs2[0]) > 2:
         print('WRONG',protein,cutoffs1,cutoffs2)
@@ -366,20 +359,20 @@ def calcProfiles_peg(T,L,systems,data,nskip=1200, wdir=".",n_protein=100,
             #
             data.loc[(protein,peg,percentage),'C_protein'] = C_protein
             data.loc[(protein,peg,percentage),'C_peg']     = C_peg
-            # Phi data
-            data.loc[(protein,peg,percentage),'phi1'] = C_protein * phi_from_molar(fasta,  df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi2'] = C_peg     * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi0'] = 1-data.loc[(protein,peg,percentage),'phi1']-data.loc[(protein,peg,percentage),'phi2']
-            ## Phi1
-            data.loc[(protein,peg,percentage),'phi1_dil']      = block_dil.av  * phi_from_molar(fasta,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi1_den']      = block_den.av  * phi_from_molar(fasta,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi1_dilSEM']   = block_dil.sem * phi_from_molar(fasta,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi1_denSEM']   = block_den.sem * phi_from_molar(fasta,df_residues,prefix=1e-3)
-            ## Phi2
-            data.loc[(protein,peg,percentage),'phi2_dil']      = block_dilp.av  * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi2_den']      = block_denp.av  * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi2_dilSEM']   = block_dilp.sem * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
-            data.loc[(protein,peg,percentage),'phi2_denSEM']   = block_denp.sem * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
+            # # Phi data
+            # data.loc[(protein,peg,percentage),'phi1'] = C_protein * phi_from_molar(fasta,  df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi2'] = C_peg     * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi0'] = 1-data.loc[(protein,peg,percentage),'phi1']-data.loc[(protein,peg,percentage),'phi2']
+            # ## Phi1
+            # data.loc[(protein,peg,percentage),'phi1_dil']      = block_dil.av  * phi_from_molar(fasta,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi1_den']      = block_den.av  * phi_from_molar(fasta,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi1_dilSEM']   = block_dil.sem * phi_from_molar(fasta,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi1_denSEM']   = block_den.sem * phi_from_molar(fasta,df_residues,prefix=1e-3)
+            # ## Phi2
+            # data.loc[(protein,peg,percentage),'phi2_dil']      = block_dilp.av  * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi2_den']      = block_denp.av  * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi2_dilSEM']   = block_dilp.sem * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
+            # data.loc[(protein,peg,percentage),'phi2_denSEM']   = block_denp.sem * phi_from_molar(fasta_p,df_residues,prefix=1e-3)
             # General info
             data.at[(protein,peg,percentage),'dilcutoff'] = cutoffs_dil
             data.at[(protein,peg,percentage),'dencutoff'] = cutoffs_den
@@ -390,36 +383,7 @@ def calcProfiles_peg(T,L,systems,data,nskip=1200, wdir=".",n_protein=100,
             data.at[(protein,peg,percentage),'h']= h
             data.at[(protein,peg,percentage),'hp']= hp
 
-            tie_line = np.array([[data.loc[(protein,peg,percentage),'phi1_dil'],data.loc[(protein,peg,percentage),'phi1'],data.loc[(protein,peg,percentage),'phi1_den']],
-                                 [data.loc[(protein,peg,percentage),'phi2_dil'],data.loc[(protein,peg,percentage),'phi2'],data.loc[(protein,peg,percentage),'phi2_den']]])
-            popt_tie, perr_tie = curve_fit(f=f_lin,xdata=tie_line[0,:],ydata=tie_line[1,:],p0=[-1,4])
-            perr_tie = np.sqrt(np.diag(perr_tie))
-            data.at[(protein,peg,percentage),'tie_line']   = tie_line
-            data.loc[(protein,peg,percentage),'tie_slope']  = popt_tie[0]
-            data.loc[(protein,peg,percentage),'tie_slopeE'] = perr_tie[0]
-            data.loc[(protein,peg,percentage),'tie_int']    = popt_tie[1]
-            data.loc[(protein,peg,percentage),'tie_intE']   = perr_tie[1]
-            # Chi delta
-
-            data.loc[(protein,peg,percentage),'chi_d']  = calculate_chi_delta(k=popt_tie[0],
-                                                                              phi1=data.loc[(protein,peg,percentage),'phi1'],
-                                                                              N1=n_res)
-            #data.loc[(protein,peg,percentage),'chi_dE'] = calculate_chi_deltaE(k=popt_tie[0],
-            #                                                                   phi1=block_dil.av,
-            #                                                                   N1=n_res,
-            #                                                                   k_err=perr_tie[0],
-            #                                                                   phi1_err=block_dil.sem * phi_from_molar(fasta,df_residues,prefix=1e-3))
             print(data.loc[(protein,peg,percentage),])
-
-#            if not np.isclose(den, block_den.av, 0.1):
-#                print(F" - Cden: Average and Block Average differ: {block_den.av-den}")
-#            if not np.isclose(dil, block_dil.av, 0.1):
-#                print(F" - Cdil: Average and Block Average differ: {block_dil.av-dil}")
-#            if not np.isclose(ratio, block_ratio.av, 0.1):
-#                print(F" - Ratio: Average and Block Average differ: {block_ratio.av-ratio}")
-#            if not np.isclose(ratio, block_dil.av/block_den.av, 0.1):
-#                print(F" - Ratio: Timeseries based does not match ratio of Block Averages: {block_ratio.av-(block_dil.av/block_den.av)}")
-
 
             block_averages[(protein, peg, percentage)] = {'den':block_den,'dil':block_dil,'ratio':block_ratio,
                                                           'denp':block_denp,'dilp':block_dilp,'ratiop':block_ratiop,
