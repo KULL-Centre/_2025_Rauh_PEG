@@ -35,18 +35,16 @@ done
 
 """)
 
-# Set the interaction cut-off.
+# Set the AH-interaction cut-off and box dimensions.
 cutoff = 2.0
 boxlength = 20 #nm
 
-# Define the contents of the system.
+# Defining what PEG molecular weights to simulate.
+names  = ['PEG400','PEG1000', 'PEG1560', 'PEG2000', 'PEG3000', 'PEG4000','PEG50001',
+          'PEG50002', 'PEG8000', 'PEG10000', 'PEG16000', 'PEG20000','PEG21000', 'PEG25000',
+          'PEG30000', 'PEG35000', 'PEG40000', 'PEG73000','PEG150000']
 
-names  = ['PEG400']
-#, 'PEG1000', 'PEG1560', 'PEG2000', 'PEG3000', 'PEG4000','PEG50001',
-#          'PEG50002', 'PEG8000', 'PEG10000', 'PEG16000', 'PEG20000','PEG21000', 'PEG25000',
-#          'PEG30000', 'PEG35000', 'PEG40000', 'PEG73000','PEG150000']
-
-#
+# Writing PBS batch files and calling qsub.  
 for name in names:
     print(name)
     if not os.path.isdir(name):
