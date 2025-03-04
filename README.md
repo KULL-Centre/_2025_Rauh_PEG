@@ -2,7 +2,7 @@
 
 This repository contains code and data for:
 
-Rauh A.S., Tesei, G. & Lindorff-Larsen, K. (2025) _A coarse-grained model for disordered proteins under crowded conditions
+Rauh A.S., Tesei, G. & Lindorff-Larsen, K. (2025) _A coarse-grained model for disordered proteins under crowded conditions._
 
 The simulation data can be retrieved from the Electronic Research Data Archive at UCPH (ERDA): [here](https://sid.erda.dk/cgi-sid/ls.py?share_id=B2pqRhqcsE)
 
