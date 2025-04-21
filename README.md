@@ -7,7 +7,7 @@ Rauh A.S., Tesei, G. & Lindorff-Larsen, K. (2025) _A coarse-grained model for di
 The simulation data can be retrieved from the Electronic Research Data Archive at UCPH (ERDA): [here](https://sid.erda.dk/cgi-sid/ls.py?share_id=B2pqRhqcsE)
 
 ## Running CALVADOS simulations with PEG
-PEG simulations can be run either with the code provided here or using the [CALVADOS package](https://github.com/KULL-Centre/CALVADOS)
+PEG simulations can be run either with the code provided here or using the [CALVADOS package](https://github.com/KULL-Centre/CALVADOS) ([Example](https://github.com/KULL-Centre/CALVADOS/tree/main/examples/slab_IDR_PEG))
 
 ## File structure
 - **data**: Pandas DataFrames with processed data from the simulations.
